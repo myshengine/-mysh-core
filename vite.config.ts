@@ -8,7 +8,7 @@ export default defineConfig({
     plugins: [dts({ rollupTypes: true })],
 
     resolve: {
-        alias: {
+        alias: {  
             '@': path.resolve(__dirname, 'src'),
             '@app': path.resolve(__dirname, 'src/app'),
             '@flow': path.resolve(__dirname, 'src/flow'),
