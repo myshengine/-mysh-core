@@ -365,6 +365,37 @@ declare class Filtered {
     parallel(callback: EntityIterationCallback): Promise<void>;
 }
 
+export declare class FSM<T extends object> implements IFSM<T> {
+    get name(): string;
+    get currentState(): IState<T>;
+    get currentStateName(): string;
+    get previousState(): string | undefined;
+    get states(): IState<T>[];
+    get store(): Store<T>;
+    private _name;
+    private _initialState;
+    private _currentState;
+    private _prevStateName?;
+    private _states;
+    private _hooks?;
+    private _store;
+    private _guards;
+    private _started;
+    constructor(config: IFSMConfig<T>, hooks?: IFSMHooks<T>);
+    listen(signalController: ISignalController): void;
+    private formatGroups;
+    start(initialState?: string): void;
+    canTransitTo(targetState: string): boolean;
+    canSend(event: string): boolean;
+    isIn(state: string): boolean;
+    transitTo(state: string): void;
+    send(event: string): void;
+    stop(): void;
+    private isGuardBlocked;
+    private setupStates;
+    private setupInitialState;
+}
+
 export declare type GroupData<T extends ISystemGroup> = T extends ISystemGroup<infer U> ? U : never;
 
 export declare type GroupType<T> = new (...args: any[]) => ISystemGroup<T>;
@@ -500,6 +531,39 @@ export declare interface IExecutor {
     resume(): void;
 }
 
+export declare interface IFSM<T extends Object> {
+    name: string;
+    currentState: IState<T>;
+    currentStateName: string;
+    previousState: string | undefined;
+    states: IState<T>[];
+    start(initialState?: string): void;
+    listen(signalController: ISignalController): void;
+    canTransitTo(state: string): boolean;
+    isIn(state: string): boolean;
+    canSend(event: string): boolean;
+    transitTo(state: string): void;
+    send(event: string): void;
+    stop(): void;
+}
+
+export declare interface IFSMConfig<T extends object> {
+    name: string;
+    initialState: string;
+    states: IState<T>[];
+    store: Store<T>;
+    guards?: Record<string, (store: Store<T>) => boolean>;
+}
+
+export declare interface IFSMHooks<T extends object> {
+    onAnyTransition?: (from: string, to: string, store: Store<T>) => void;
+    onEvent?: Record<string, (store: Store<T>) => void>;
+    onUnhandledEvent?: (event: string, currentState: string, store: Store<T>) => void;
+    onBlockedByGuard?: (from: string, to: string, store: Store<T>) => void;
+    onEnterState?: (state: string, store: Store<T>) => void;
+    onExitState?: (state: string, store: Store<T>) => void;
+}
+
 export declare interface IGroupOption extends Partial<ISystemOptions> {
     order?: number;
     instance?: ISystemProvider;
@@ -581,6 +645,21 @@ export declare interface ISleep {
     id: string;
     wait(): Promise<void>;
     resolve(): void;
+}
+
+export declare interface IState<T extends object> {
+    name: string;
+    transitions: Record<string, string>;
+    onEnter?: GroupType<IStateTransitionData<T>>[];
+    onExit?: GroupType<IStateTransitionData<T>>[];
+    onTransition?: GroupType<IStateTransitionData<T>>[];
+    subMachine?: IFSM<any>;
+}
+
+export declare interface IStateTransitionData<T extends object = any> {
+    from: string;
+    to: string;
+    store: Store<T>;
 }
 
 /**
@@ -732,6 +811,12 @@ export declare class MyshApp {
     registerGlobalServices(providers: Provider[]): void;
     protected registerServices(): void;
 }
+
+export declare const OnStateEnterSignal: Signal<IStateTransitionData<any>>;
+
+export declare const OnStateExitSignal: Signal<IStateTransitionData<any>>;
+
+export declare const OnStateTransitionSignal: Signal<IStateTransitionData<any>>;
 
 export declare const OnUpdateSignal: Signal<IUpdateLoopData>;
 
