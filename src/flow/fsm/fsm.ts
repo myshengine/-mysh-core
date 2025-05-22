@@ -1,8 +1,8 @@
 import { Store } from "@data/store";
 import { IFSM, IFSMConfig, IFSMHooks, IState, IStateTransitionData } from "./models";
-import { ISignalConfig, ISignalController, SignalController } from "@execution/signal-controller";
+import { ISignalConfig, ISignalController } from "@execution/signal-controller";
 import { OnStateEnterSignal, OnStateExitSignal, OnStateTransitionSignal } from "./signals";
-import { GroupType, ISystemGroup } from "@execution/system-group";
+import { GroupType } from "@execution/system-group";
 import { ISignal } from "@shared/signal";
 
 export class FSM<T extends object> implements IFSM<T> {

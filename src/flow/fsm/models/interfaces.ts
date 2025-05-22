@@ -2,18 +2,18 @@ import { Store } from "@data/store";
 import { ISignalController } from "@execution/signal-controller";
 import { GroupType } from "@execution/system-group";
 
-export interface IStateTransitionData {
+export interface IStateTransitionData<T extends object = any> {
     from: string;
     to: string;
-    store: Store<any>;
+    store: Store<T>;
 }
 
 export interface IState<T extends object> {
     name: string;
     transitions: Record<string, string>;
-    onEnter?: GroupType<IStateTransitionData>[];
-    onExit?: GroupType<IStateTransitionData>[];
-    onTransition?: GroupType<IStateTransitionData>[];
+    onEnter?: GroupType<IStateTransitionData<T>>[];
+    onExit?: GroupType<IStateTransitionData<T>>[];
+    onTransition?: GroupType<IStateTransitionData<T>>[];
     subMachine?: IFSM<any>; 
 }
 
