@@ -175,7 +175,7 @@ function D(a) {
     });
   };
 }
-class S {
+class w {
   constructor() {
     this._cache = /* @__PURE__ */ new Map();
   }
@@ -237,7 +237,7 @@ class F {
     await Promise.all(e);
   }
 }
-const w = class w {
+const S = class S {
   /**
    * @description
    * Increment the frequency of a given component type.
@@ -279,8 +279,8 @@ const w = class w {
     return [...t].sort((e, s) => this.rarity(e) - this.rarity(s));
   }
 };
-w._componentFrequency = /* @__PURE__ */ new Map();
-let l = w;
+S._componentFrequency = /* @__PURE__ */ new Map();
+let l = S;
 class x {
   constructor() {
     this._entities = /* @__PURE__ */ new Map();
@@ -721,10 +721,10 @@ class j {
     u.instance.registerGlobal(t);
   }
   registerServices() {
-    const t = new x(), e = new S(), s = new g(), i = new f(), r = new p(e, t);
+    const t = new x(), e = new w(), s = new g(), i = new f(), r = new p(e, t);
     this.registerGlobalServices([
       { provide: x, useFactory: () => t },
-      { provide: S, useFactory: () => e },
+      { provide: w, useFactory: () => e },
       { provide: g, useFactory: () => s },
       { provide: f, useFactory: () => i },
       { provide: p, useFactory: () => r }
@@ -765,10 +765,10 @@ class U {
     });
   }
   formatGroups(t, e, s) {
-    const i = e.map((r) => ({ group: r, canExecute: () => this.currentStateName === t.name }));
+    const i = (n) => n.fsmName !== this._name ? !1 : this._currentState ? this.currentStateName === t.name : !1, r = e.map((n) => ({ group: n, canExecute: (o) => i(o) }));
     return {
       signal: s,
-      executions: i
+      executions: r
     };
   }
   start(t) {
@@ -790,10 +790,12 @@ class U {
     if (this.isGuardBlocked(t))
       return;
     (s = this._currentState.subMachine) == null || s.stop(), b.dispatch({
+      fsmName: this._name,
       from: this._currentState.name,
       to: t,
       store: this._store
     }), (r = (i = this._hooks) == null ? void 0 : i.onExitState) == null || r.call(i, this._currentState.name, this._store), v.dispatch({
+      fsmName: this._name,
       from: this._currentState.name,
       to: t,
       store: this._store
@@ -801,6 +803,7 @@ class U {
     const e = this._states.get(t);
     if (!e) throw new Error(`[FSM:${this._name}] Target state "${t}" not found`);
     this._prevStateName = this._currentState.name, this._currentState = e, (o = (n = this._hooks) == null ? void 0 : n.onAnyTransition) == null || o.call(n, this._prevStateName, t, this._store), (c = (h = this._hooks) == null ? void 0 : h.onEnterState) == null || c.call(h, this._currentState.name, this._store), y.dispatch({
+      fsmName: this._name,
       from: this._currentState.name,
       to: t,
       store: this._store
@@ -816,6 +819,7 @@ class U {
   stop() {
     var t, e, s;
     (t = this._currentState.subMachine) == null || t.stop(), b.dispatch({
+      fsmName: this._name,
       from: this._currentState.name,
       to: this._currentState.name,
       store: this._store
@@ -835,6 +839,7 @@ class U {
     const e = this._states.get(t);
     if (!e) throw new Error(`State ${t} not found`);
     this._currentState = e, (i = (s = this._hooks) == null ? void 0 : s.onEnterState) == null || i.call(s, this._currentState.name, this._store), y.dispatch({
+      fsmName: this._name,
       from: this._currentState.name,
       to: this._currentState.name,
       store: this._store
@@ -1119,7 +1124,7 @@ export {
   G as Store,
   C as System,
   T as SystemGroup,
-  S as SystemsContainer,
+  w as SystemsContainer,
   f as TimerController,
   g as UpdateLoop,
   _ as Utils

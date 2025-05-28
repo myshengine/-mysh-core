@@ -657,6 +657,7 @@ export declare interface IState<T extends object> {
 }
 
 export declare interface IStateTransitionData<T extends object = any> {
+    fsmName: string;
     from: string;
     to: string;
     store: Store<T>;
