@@ -148,7 +148,7 @@ export class FSM<T extends object> implements IFSM<T> {
             store: this._store
         });
 
-        this._currentState.subMachine?.start(this._currentState.subMachine.currentStateName);
+        this._currentState.subMachine?.start();
     }
 
     public send(event: string): void {
@@ -206,6 +206,6 @@ export class FSM<T extends object> implements IFSM<T> {
             store: this._store
         });
 
-        this._currentState.subMachine?.start(this._currentState.subMachine.currentStateName);
+        this._currentState.subMachine?.start();
     }
 }
