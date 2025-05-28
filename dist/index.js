@@ -175,7 +175,7 @@ function D(a) {
     });
   };
 }
-class w {
+class S {
   constructor() {
     this._cache = /* @__PURE__ */ new Map();
   }
@@ -237,7 +237,7 @@ class F {
     await Promise.all(e);
   }
 }
-const b = class b {
+const w = class w {
   /**
    * @description
    * Increment the frequency of a given component type.
@@ -279,8 +279,8 @@ const b = class b {
     return [...t].sort((e, s) => this.rarity(e) - this.rarity(s));
   }
 };
-b._componentFrequency = /* @__PURE__ */ new Map();
-let l = b;
+w._componentFrequency = /* @__PURE__ */ new Map();
+let l = w;
 class x {
   constructor() {
     this._entities = /* @__PURE__ */ new Map();
@@ -721,17 +721,17 @@ class j {
     u.instance.registerGlobal(t);
   }
   registerServices() {
-    const t = new x(), e = new w(), s = new g(), i = new f(), r = new p(e, t);
+    const t = new x(), e = new S(), s = new g(), i = new f(), r = new p(e, t);
     this.registerGlobalServices([
       { provide: x, useFactory: () => t },
-      { provide: w, useFactory: () => e },
+      { provide: S, useFactory: () => e },
       { provide: g, useFactory: () => s },
       { provide: f, useFactory: () => i },
       { provide: p, useFactory: () => r }
     ]);
   }
 }
-const y = new m(), S = new m(), v = new m();
+const y = new m(), b = new m(), v = new m();
 class U {
   constructor(t, e) {
     this._states = /* @__PURE__ */ new Map(), this._started = !1, this._name = t.name, this._hooks = e, this._store = t.store, this._guards = t.guards ?? {}, this._initialState = t.initialState, this.setupStates(t.states);
@@ -757,7 +757,7 @@ class U {
   listen(t) {
     const e = [];
     this._states.forEach((s) => {
-      s.onEnter && e.push(this.formatGroups(s, s.onEnter, y)), s.onExit && e.push(this.formatGroups(s, s.onExit, S)), s.onTransition && e.push(this.formatGroups(s, s.onTransition, v));
+      s.onEnter && e.push(this.formatGroups(s, s.onEnter, y)), s.onExit && e.push(this.formatGroups(s, s.onExit, b)), s.onTransition && e.push(this.formatGroups(s, s.onTransition, v));
     }), e.forEach((s) => {
       s.executions.forEach((i) => {
         t.inject(s.signal, i);
@@ -789,7 +789,7 @@ class U {
       throw new Error(`Cannot transit from ${this._currentState.name} to ${t}`);
     if (this.isGuardBlocked(t))
       return;
-    (s = this._currentState.subMachine) == null || s.stop(), S.dispatch({
+    (s = this._currentState.subMachine) == null || s.stop(), b.dispatch({
       from: this._currentState.name,
       to: t,
       store: this._store
@@ -804,7 +804,7 @@ class U {
       from: this._currentState.name,
       to: t,
       store: this._store
-    }), (d = this._currentState.subMachine) == null || d.start(this._currentState.subMachine.currentStateName);
+    }), (d = this._currentState.subMachine) == null || d.start();
   }
   send(t) {
     var s, i, r, n, o;
@@ -815,7 +815,7 @@ class U {
   }
   stop() {
     var t, e, s;
-    (t = this._currentState.subMachine) == null || t.stop(), S.dispatch({
+    (t = this._currentState.subMachine) == null || t.stop(), b.dispatch({
       from: this._currentState.name,
       to: this._currentState.name,
       store: this._store
@@ -838,7 +838,7 @@ class U {
       from: this._currentState.name,
       to: this._currentState.name,
       store: this._store
-    }), (r = this._currentState.subMachine) == null || r.start(this._currentState.subMachine.currentStateName);
+    }), (r = this._currentState.subMachine) == null || r.start();
   }
 }
 class E {
@@ -1110,7 +1110,7 @@ export {
   D as Inject,
   j as MyshApp,
   y as OnStateEnterSignal,
-  S as OnStateExitSignal,
+  b as OnStateExitSignal,
   v as OnStateTransitionSignal,
   A as OnUpdateSignal,
   u as ServiceContainer,
@@ -1119,7 +1119,7 @@ export {
   G as Store,
   C as System,
   T as SystemGroup,
-  w as SystemsContainer,
+  S as SystemsContainer,
   f as TimerController,
   g as UpdateLoop,
   _ as Utils
