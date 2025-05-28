@@ -3,6 +3,7 @@ import { ISignalController } from "@execution/signal-controller";
 import { GroupType } from "@execution/system-group";
 
 export interface IStateTransitionData<T extends object = any> {
+    fsmName: string;
     from: string;
     to: string;
     store: Store<T>;

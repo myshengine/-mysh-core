@@ -81,7 +81,14 @@ export class FSM<T extends object> implements IFSM<T> {
         groups: GroupType<IStateTransitionData>[], 
         signal: ISignal<IStateTransitionData>
     ): ISignalConfig {
-        const executions = groups.map(g => ({group: g, canExecute: () => this.currentStateName === state.name}));
+
+        const canExecute = (data: IStateTransitionData) => {
+            if(data.fsmName !== this._name) return false;
+            else if(!this._currentState) return false;
+            else return this.currentStateName === state.name;
+        }
+
+        const executions = groups.map(g => ({group: g, canExecute: (data: IStateTransitionData) => canExecute(data)}));
 
         return {
             signal,
@@ -120,6 +127,7 @@ export class FSM<T extends object> implements IFSM<T> {
         this._currentState.subMachine?.stop();
 
         OnStateExitSignal.dispatch({
+            fsmName: this._name,
             from: this._currentState.name,
             to: state,
             store: this._store
@@ -128,6 +136,7 @@ export class FSM<T extends object> implements IFSM<T> {
         this._hooks?.onExitState?.(this._currentState.name, this._store);
 
         OnStateTransitionSignal.dispatch({
+            fsmName: this._name,
             from: this._currentState.name,
             to: state,
             store: this._store
@@ -143,6 +152,7 @@ export class FSM<T extends object> implements IFSM<T> {
         this._hooks?.onEnterState?.(this._currentState.name, this._store);
 
         OnStateEnterSignal.dispatch({
+            fsmName: this._name,
             from: this._currentState.name,
             to: state,
             store: this._store
@@ -166,6 +176,7 @@ export class FSM<T extends object> implements IFSM<T> {
         this._currentState.subMachine?.stop();
 
         OnStateExitSignal.dispatch({
+            fsmName: this._name,
             from: this._currentState.name,
             to: this._currentState.name,
             store: this._store
@@ -201,6 +212,7 @@ export class FSM<T extends object> implements IFSM<T> {
         this._hooks?.onEnterState?.(this._currentState.name, this._store);
 
         OnStateEnterSignal.dispatch({
+            fsmName: this._name,
             from: this._currentState.name,
             to: this._currentState.name,
             store: this._store
