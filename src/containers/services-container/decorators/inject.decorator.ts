@@ -28,7 +28,7 @@ export function Inject<T>(token: Token<T>) {
       }
   
       if(target instanceof SystemGroup) {
-        moduleId = target.uuid;
+        moduleId = target.uuid || 'global';
       }
   
       Object.defineProperty(target, propertyKey, {

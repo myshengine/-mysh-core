@@ -168,7 +168,7 @@ function D(a) {
       }), u.instance.memorizeSystem(t.constructor, a, e);
       return;
     }
-    t instanceof T && (s = t.uuid), Object.defineProperty(t, e, {
+    t instanceof T && (s = t.uuid || "global"), Object.defineProperty(t, e, {
       get: () => u.instance.get(a, s),
       enumerable: !0,
       configurable: !1
